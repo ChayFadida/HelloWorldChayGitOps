@@ -1,0 +1,43 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: hello-world-prod
+  namespace: argocd
+spec:
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: hello-world-prod
+  source:
+    repoURL: 'https://github.com/ChayFadida/HelloWorldChayGitOps.git'
+    path: 'hello-world-app'
+    targetRevision: 'master'
+    helm:
+      valueFiles:
+        - values-prod.yaml
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: hello-world-staging
+  namespace: argocd
+spec:
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: hello-world-staging
+  source:
+    repoURL: 'https://github.com/ChayFadida/HelloWorldChayGitOps.git'
+    path: 'hello-world-app'
+    targetRevision: 'master'
+    helm:
+      valueFiles:
+        - values-staging.yaml
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
